@@ -1,0 +1,69 @@
+.container {
+    padding: 0 10px !important;
+    overflow-y: auto;
+    /* border: 1px solid #80808073; */
+    height: 85vh;
+    margin: 20px 0 0;
+    width: 95vw;
+    max-width: 95vw !important;
+}
+
+#gridContainer {
+    max-height: 800px;
+}
+
+/* .freespaced-table {
+
+} */
+
+.grid-container {
+    width: inherit !important;
+    flex-grow: 1;
+    margin: 30px !important;
+    display: grid;
+}
+
+.grid-item {
+    border: 1px solid #80808073;
+    flex-grow: 1;
+    margin: 30px;
+    display: grid;
+    border-radius: 3px;
+}
+
+.card-panel {
+    display: flex;
+    padding: 10px !important;
+    align-items: center;
+    background-color: rgb(217, 213, 197);
+}
+
+.dx-widget {
+    font-size: 14px !important;
+    white-space: unset !important;
+}
+
+.dx-datagrid .dx-column-lines > td {
+    border-left: none !important;
+}
+
+.dx-datagrid .dx-row > td {
+    padding: 15px !important;
+
+}
+
+.dx-datagrid-pager {
+    border: none !important;
+}
+
+.dx-row .dx-header-row {
+    border-top: 1px solid #ddd;
+}
+
+.dx-datagrid .dx-column-lines > td {
+    border-right: none !important;
+}
+
+.dx-datagrid-nowrap, .dx-datagrid-nowrap .dx-header-row>td>.dx-datagrid-text-content {
+    white-space: inherit !important;
+}
