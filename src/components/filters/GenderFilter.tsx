@@ -2,6 +2,7 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import {
   Box,
+  FormControl,
   Grid, IconButton, InputAdornment, InputLabel, makeStyles, MenuItem, Select,
 } from '@material-ui/core';
 import { SelectOption } from '../../util/models';
@@ -11,16 +12,21 @@ interface OwnProps {
     setFilterByGender: Dispatch<SetStateAction<string>>,
     filterByGender: string,
     products: SelectOption[],
+    filteredProducts: SelectOption[],
     setProducts: Dispatch<SetStateAction<SelectOption[]>>,
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   selectAdornment: {
     '& .MuiButtonBase-root': {
       position: 'absolute',
       padding: 0,
       right: '25px',
     },
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
   },
   select: {
     '& .MuiSelect-select.MuiSelect-select': {
@@ -36,11 +42,11 @@ export default function GenderFilter({
   setFilterByGender,
   filterByGender,
   products,
+  filteredProducts,
   setProducts,
 }: OwnProps) {
   const [val, setVal] = useState(filterByGender);
   const classes = useStyles();
-  const inputLabel = React.useRef<HTMLLabelElement>(null);
 
   const genderOptions = [
         {
@@ -61,8 +67,8 @@ export default function GenderFilter({
       const option = genderOptions.find((e) => e.value === value);
       setVal(option ? option.value : '');
       setFilterByGender(option ? option.value : '');
-      const filteredProducts = products.filter((e) => e.gender === value);
-      setProducts(filteredProducts);      
+      const filteredProductsList = filteredProducts.filter((e) => e.gender === value);
+      setProducts(filteredProductsList);      
   };
 
   const handleClearSelection = () => {
@@ -76,13 +82,13 @@ export default function GenderFilter({
       <Grid container item spacing={2}>
         <Grid item xs={12} md={12}>
           <Grid item md={12}>
-            <InputLabel ref={inputLabel} id="demo-mutiple-name-label">Gender</InputLabel>
+          <FormControl className={classes.formControl}> 
+            <InputLabel id="gender-filter-label">Gender</InputLabel>
             <Select
+                labelId="gender-filter-label"
                 fullWidth
-                ref={inputLabel}
                 className={classes.select}
                 value={val}
-                label={'Gender'}
                 onChange={(event: any) => {
                     handleChange(event.target.value);
                 }}
@@ -100,13 +106,14 @@ export default function GenderFilter({
                     </InputAdornment>
                 )}
                 MenuProps={{ classes: { paper: classes.menuPaper } }}
-                >
+            >
                 {genderOptions.map(({ label, value: v }, key) => (
                     <MenuItem key={label + key} value={v}>
                         {label}
                     </MenuItem>
                 ))}
             </Select>
+          </FormControl>
           </Grid>
         </Grid>
       </Grid>

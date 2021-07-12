@@ -1,5 +1,6 @@
 export interface HeadRow {
     id: string;
+    dataField?: string;
     caption: string;
     index: number;
     field?: string;
@@ -7,7 +8,7 @@ export interface HeadRow {
     renderType?: string;
     render?: (props: any) => React.ReactNode;
     groupIndex?: number;
-    calculateCellValue?: (data: any) => any
+    calculateCellValue?: (data: SelectOption) => any
     width?: number;
     allowSorting?: boolean;
     defaultSortOrder?: 'asc' | 'desc';
@@ -21,4 +22,9 @@ export interface HeadRow {
     price: string; 
     image_link: string; 
     additional_image_link: string;
+}
+
+export interface option {
+    label: string;
+    value: string
 }

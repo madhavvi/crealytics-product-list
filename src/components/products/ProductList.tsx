@@ -1,7 +1,4 @@
-import React, { useCallback, useState } from 'react';
-import { products } from '../../util/products';
-import { HeadRow } from '../../util/models';
-import { columns } from './custom-columns';
+import React, { useState } from 'react';
 import DataGrid, {
     Column,
     SearchPanel,
@@ -12,31 +9,62 @@ import DataGrid, {
 import { Template } from 'devextreme-react/core/template';
 import { Paper, Container, Grid } from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
-import './products.css';
 import 'devextreme/dist/css/dx.light.css';
+import './products.css';
+import { products } from '../../util/products';
+import { HeadRow } from '../../util/models';
+import { columns } from './CustomColumns';
 import GenderFilter from '../filters/GenderFilter';
-import { useEffect } from 'react';
-
+import RowRender from './RowRender';
+import PriceFilter from '../filters/PriceFilter';
 
 export default function ProductList() {
   const allowedPageSizes = [50, 100, 200];
   const [filterByGender, setFilterByGender] = useState('');
-  const [productss, setProducts] = useState(products);
+  const [filterByPrice, setFilterByPrice] = useState(false);
+  const [filteredProducts, setProducts] = useState(products);
+  const [showImages, setShowImages] = useState(false);
 
-
-  const renderGenderFilter = useCallback(() => (
+  const renderGenderFilter = () => (
     <GenderFilter
-      setFilterByGender={setFilterByGender}
-      filterByGender={filterByGender}
-      products={products}
-      setProducts={setProducts}
+        setFilterByGender={setFilterByGender}
+        filterByGender={filterByGender}
+        filteredProducts={filteredProducts}
+        products={products}
+        setProducts={setProducts}
     />
-  ), [filterByGender, products]);
+  );
+
+  const renderPriceFilter = () => {
+    return (
+        <PriceFilter
+            setFilterByPrice={setFilterByPrice}
+            filterByPrice={filterByPrice}
+            filteredProducts={filteredProducts}
+            products={products}
+            setProducts={setProducts}
+        />
+    )
+  };
+
+  const rowRender = (rowInfo: any) => {
+      return (
+        <RowRender 
+            showImages={showImages}
+            setShowImages={setShowImages}
+            rowInfo={rowInfo.data}
+        />
+      )
+  };
 
   const onToolbarPreparing = (e: any) => {
       e.toolbarOptions.items.unshift({
         location: 'before',
-        template: 'genderFilter',
+        template: 'genderFilter'
+      },
+      {
+        location: 'before',
+        template: 'priceFilter'
       });
   };
  
@@ -50,16 +78,16 @@ export default function ProductList() {
                     <Paper elevation={0} style={{ padding: 0 }}>
                         <DataGrid
                             id='gridContainer'
-                            dataSource={productss}
+                            dataSource={filteredProducts}
                             noDataText={'No data'}
                             showBorders={true}
                             showRowLines={true}
                             style={{ height: '100%' }}
                             className="freespaced-table"
-                            //   scrolling={{ mode: 'virtual', rowRenderingMode: 'virtual' }}
                             allowColumnReordering
                             repaintChangesOnly
                             onToolbarPreparing={onToolbarPreparing}
+                            rowRender={(data) => rowRender(data)}
                             >
                             <Scrolling rowRenderingMode='virtual'></Scrolling>
                             <Paging defaultPageSize={100} />
@@ -72,12 +100,8 @@ export default function ProductList() {
                                 showNavigationButtons='true' 
                             />
                             <Template name="genderFilter" render={renderGenderFilter} />
-                            {/* <Template name="resultsCounter" render={ds.renderResultsCounter} /> */}
+                            <Template name="priceFilter" render={renderPriceFilter} />
                             <SearchPanel visible placeholder='Search...' />
-                            {/* <Editing
-                                refreshMode="reshape"
-                                mode="cell"
-                            /> */}
                             {columns
                                 // .sort((a: HeadRow, b: HeadRow) => a.id - b.id)
                                 .map((item: HeadRow) => (
@@ -85,15 +109,14 @@ export default function ProductList() {
                                     key={item.id}
                                     dataField={item.id}
                                     caption={item.caption}
-                                    dataType={item.datatype || 'string'}
+                                    dataType={item.datatype}
                                     cellRender={item.render}
                                     width={`${item.width}%`}
-                                    // calculateCellValue={item.calculateCellValue}
+                                    calculateCellValue={item.calculateCellValue}
                                     allowSorting={item.allowSorting}
                                     defaultSortOrder={item.defaultSortOrder}
                                 />
                                 ))}
-                            {/* {buttons && <Column type="buttons" buttons={buttons} />} */}
                         </DataGrid>
                     </Paper>
                 </Container>
