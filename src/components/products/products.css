@@ -2,14 +2,14 @@
     padding: 0 10px !important;
     overflow-y: auto;
     /* border: 1px solid #80808073; */
-    height: 85vh;
+    height: 81vh;
     margin: 20px 0 0;
     width: 95vw;
     max-width: 95vw !important;
 }
 
 #gridContainer {
-    max-height: 800px;
+    max-height: 81vh;
 }
 
 .grid-container {
