@@ -22,4 +22,4 @@ You will also see any lint errors in the console.
 8. Select multiple filters( gender, price and search) to reflect data accordingly. Try different scenarios with filters(Hopefully all will work).
 9. To load images in Image column, lazy laoding attribute is added in img tag.
 10. Images in additional_image_links are cached.
-11. Result counter besides search panel will diplay the count of products from the selection of various filters like Gender filter, On sale price filter and search panel. 
+11. Result counter besides search panel will display the count of products from the selection of various filters like Gender filter, On sale price filter and search panel. 
