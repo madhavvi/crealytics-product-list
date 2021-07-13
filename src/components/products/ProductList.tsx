@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState } from 'react';
 import DataGrid, {
     Column,
@@ -5,6 +6,8 @@ import DataGrid, {
     Scrolling,
     Paging,
     Pager,
+    Selection,
+    MasterDetail,
 } from 'devextreme-react/data-grid';
 import { Template } from 'devextreme-react/core/template';
 import { Paper, Container, Grid } from '@material-ui/core';
@@ -23,13 +26,12 @@ export default function ProductList() {
   const [filterByGender, setFilterByGender] = useState('');
   const [filterByPrice, setFilterByPrice] = useState(false);
   const [filteredProducts, setProducts] = useState(products);
-  const [showImages, setShowImages] = useState(false);
 
   const renderGenderFilter = () => (
-    <GenderFilter
+    <GenderFilter                                               // filter for gender, code in GenderFilter.tsx
         setFilterByGender={setFilterByGender}
         filterByGender={filterByGender}
-        filteredProducts={filteredProducts}
+        filterByPrice={filterByPrice}
         products={products}
         setProducts={setProducts}
     />
@@ -37,27 +39,41 @@ export default function ProductList() {
 
   const renderPriceFilter = () => {
     return (
-        <PriceFilter
+        <PriceFilter                                             // filter for price, code in PriceFilter.tsx
             setFilterByPrice={setFilterByPrice}
             filterByPrice={filterByPrice}
-            filteredProducts={filteredProducts}
+            filterByGender={filterByGender}
             products={products}
             setProducts={setProducts}
         />
     )
   };
 
-  const rowRender = (rowInfo: any) => {
-      return (
-        <RowRender 
-            showImages={showImages}
-            setShowImages={setShowImages}
-            rowInfo={rowInfo.data}
-        />
-      )
+  const renderResultsCounter = (e: any) => {                       // to display result counter 
+    const resultsCount = e.component.totalCount();
+    const recordsText = `Listing ${resultsCount} records`;
+    
+    return (
+        <i>
+            {resultsCount !== -1 && recordsText}
+        </i>
+    );
   };
 
-  const onToolbarPreparing = (e: any) => {
+  const rowRender = (e: any) =>  <RowRender rowInfo={e.data} />   // rendering additional images using RowRender
+
+  const onRowClick = (e: any) => {                                //  to toggle expand/collapse for the row
+    var key = e.component.getKeyByRowIndex(e.rowIndex);  
+    var expanded = e.component.isRowExpanded(key);  
+    if (expanded) {  
+        e.component.collapseRow(key);  
+    }  
+    else {  
+        e.component.expandRow(key);  
+    }  
+  }
+
+  const onToolbarPreparing = (e: any) => {                           //  to render filter templates
       e.toolbarOptions.items.unshift({
         location: 'before',
         template: 'genderFilter'
@@ -65,6 +81,11 @@ export default function ProductList() {
       {
         location: 'before',
         template: 'priceFilter'
+      },
+      {
+        location: 'after',
+        template: 'resultsCounter',
+        component: e.component
       });
   };
  
@@ -73,7 +94,6 @@ export default function ProductList() {
         <Grid container className="grid-container" style={{ flexGrow: 1, margin: '30px', display: 'grid' }}>
             <Grid item className="grid-item"> 
                 <CardHeader className="card-panel" title="Products"/>
-            
                 <Container className="container">
                     <Paper elevation={0} style={{ padding: 0 }}>
                         <DataGrid
@@ -87,7 +107,7 @@ export default function ProductList() {
                             allowColumnReordering
                             repaintChangesOnly
                             onToolbarPreparing={onToolbarPreparing}
-                            rowRender={(data) => rowRender(data)}
+                            onRowClick={(e: any) => onRowClick(e)}
                             >
                             <Scrolling rowRenderingMode='virtual'></Scrolling>
                             <Paging defaultPageSize={100} />
@@ -101,9 +121,11 @@ export default function ProductList() {
                             />
                             <Template name="genderFilter" render={renderGenderFilter} />
                             <Template name="priceFilter" render={renderPriceFilter} />
+                            <Template name="resultsCounter" render={(e: any) => renderResultsCounter(e)} />
                             <SearchPanel visible placeholder='Search...' />
+                            <Selection mode="single" />
                             {columns
-                                // .sort((a: HeadRow, b: HeadRow) => a.id - b.id)
+                                // .sort((a: HeadRow, b: HeadRow) => a.id - b.id)       // uncomment in case of sorting is required 
                                 .map((item: HeadRow) => (
                                 <Column
                                     key={item.id}
@@ -117,6 +139,7 @@ export default function ProductList() {
                                     defaultSortOrder={item.defaultSortOrder}
                                 />
                                 ))}
+                                <MasterDetail enabled={false} render={(e: any) => rowRender(e)} />
                         </DataGrid>
                     </Paper>
                 </Container>

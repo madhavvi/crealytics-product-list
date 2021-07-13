@@ -3,11 +3,9 @@ export interface HeadRow {
     dataField?: string;
     caption: string;
     index: number;
-    field?: string;
     datatype?: 'string' | 'number' | 'datetime' | 'boolean' | 'Date';
     renderType?: string;
     render?: (props: any) => React.ReactNode;
-    groupIndex?: number;
     calculateCellValue?: (data: SelectOption) => any
     width?: number;
     allowSorting?: boolean;

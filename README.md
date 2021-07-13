@@ -1,12 +1,8 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm start` or `yarn start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -14,33 +10,16 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Implementation
+1. Web page will display table with toolbar for gender filter, sale price filter, total count for prodcuts and search panel.
+2. On row click, row will expand and show the rest of the images form additional_image_link field. Toggle rowClick is implemented.
+3. To search, enter text in search panel, result will appear as user enters text. Matching text will be highlighted in table.
+4. To filter by Gender, select option form dropdown and result will appear dynamically.
+4. To filter by price, check the checkbox for On sale. If checked, products which are on sale will be reflected inside table.
+5. Initial limit for pagination is set to 100. User can select from pagination dropdown for limit 50, 100 and 200.
+6. Page navigation and page selector buttons are provided at end of the table.
+7. Column sorting, click on column title to sort the data with the selected column. Except Image column are all sortable. 
+8. Select multiple filters( gender, price and search) to reflect data accordingly. Try different scenarios with filters(Hopefully all will work).
+9. To load images in Image column, lazy laoding attribute is added in img tag.
+10. Images in additional_image_links are cached.
+11. Result counter besides search panel will diplay the count of products from the selection of various filters like Gender filter, On sale price filter and search panel. 

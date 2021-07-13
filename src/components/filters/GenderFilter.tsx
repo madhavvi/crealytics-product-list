@@ -12,9 +12,24 @@ interface OwnProps {
     setFilterByGender: Dispatch<SetStateAction<string>>,
     filterByGender: string,
     products: SelectOption[],
-    filteredProducts: SelectOption[],
+    filterByPrice: boolean,
     setProducts: Dispatch<SetStateAction<SelectOption[]>>,
 }
+
+const genderOptions = [
+  {
+      label: 'Female',
+      value: 'female'
+  },
+  {
+      label: 'Male',
+      value: 'male'
+  },
+  {
+      label: 'Unisex',
+      value: 'unisex'
+  },
+];
 
 const useStyles = makeStyles((theme) => ({
   selectAdornment: {
@@ -42,39 +57,25 @@ export default function GenderFilter({
   setFilterByGender,
   filterByGender,
   products,
-  filteredProducts,
+  filterByPrice,
   setProducts,
 }: OwnProps) {
   const [val, setVal] = useState(filterByGender);
   const classes = useStyles();
-
-  const genderOptions = [
-        {
-            label: 'Female',
-            value: 'female'
-        },
-        {
-            label: 'Male',
-            value: 'male'
-        },
-        {
-            label: 'Unisex',
-            value: 'unisex'
-        },
-  ];
   
-  const handleChange = (value: any) => {
+  const priceFiltered = filterByPrice ? products.filter((item) => item.sale_price < item.price) : products;
+  const handleChange = (value: any) => {    
       const option = genderOptions.find((e) => e.value === value);
       setVal(option ? option.value : '');
       setFilterByGender(option ? option.value : '');
-      const filteredProductsList = filteredProducts.filter((e) => e.gender === value);
+      const filteredProductsList = priceFiltered.filter((e) => e.gender === value);
       setProducts(filteredProductsList);      
   };
 
   const handleClearSelection = () => {
     setVal('');
     setFilterByGender('');
-    setProducts(products);
+    setProducts(priceFiltered);
   };
 
   return (

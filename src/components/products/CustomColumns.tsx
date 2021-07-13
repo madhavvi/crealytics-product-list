@@ -1,14 +1,9 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-// import { SelectOption } from "../../util/models";
+import imageCaching from "../../util/imageCaching";
 
-// const genderRender = (data: SelectOption) => {
-//     let genderString = data.gender;    
-//     const lower = genderString && genderString.toLowerCase();    
-//     return <span>{lower.charAt(0).toUpperCase() + lower.slice(1)}</span>;
-// }
-
-const cellRender = (data: any) => {
+const cellRender = (data: any) => { // to render image in table cell
     const img_url = data && data.data && data.data.image_link;  
+    imageCaching([img_url]);
     return <img src={img_url} loading="lazy" width="50" height="50" alt="Image not found" />;
 }
 

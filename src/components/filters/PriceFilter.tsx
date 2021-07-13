@@ -4,7 +4,7 @@ import {
   Box,
   Checkbox,
   FormControlLabel,
-  Grid, makeStyles,
+  Grid,
 } from '@material-ui/core';
 import { SelectOption } from '../../util/models';
 
@@ -12,31 +12,35 @@ interface OwnProps {
     setFilterByPrice: Dispatch<SetStateAction<any>>,
     filterByPrice: boolean,
     products: SelectOption[],
-    filteredProducts: SelectOption[],
+    filterByGender: string,
     setProducts: Dispatch<SetStateAction<SelectOption[]>>,
 }
-
-const useStyles = makeStyles((theme) => ({
-
-}));
 
 export default function PriceFilter({
     setFilterByPrice,
     filterByPrice,
     products,
     setProducts,
-    filteredProducts,
+    filterByGender,
 }: OwnProps) {
-//   const classes = useStyles();
   
   const handleChange = (event: any) => {
-      setFilterByPrice(event.target.checked);
-      const filteredProductsList = event.target.checked ? (filteredProducts.filter((item) => item.sale_price < item.price)) : products;
-      setProducts(filteredProductsList);      
+    const genderFiltered = filterByGender ? products.filter((e) => e.gender === filterByGender) : products;
+    
+    setFilterByPrice(event.target.checked);
+    if (event.target.checked) {
+        const priceFiltered = products.filter((item) => item.sale_price < item.price);
+        const onSaleProducts = filterByGender ? genderFiltered.filter((item) => item.sale_price < item.price) : priceFiltered;
+        setProducts(onSaleProducts); 
+    } else {
+      setProducts(genderFiltered);
+    }
+
+
   };
 
   return (
-    <Box minWidth={120}>
+    <Box minWidth={120} style={{ padding: '8px 12px' }}>
       <Grid container item spacing={2}>
         <Grid item xs={12} md={12}>
           <Grid item md={12}>
